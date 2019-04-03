@@ -148,8 +148,8 @@ public class ScoreAnalysis {
             avg = sum / stuNum;
             context.write(new Text("The average is:"), new IntWritable(avg));
             context.write(new Text("min:"), new IntWritable(min));
-            for (Text val : values){
-                String[] valTokens = val.toString().split(SPACE);
+            for (String val : cache){
+                String[] valTokens = val.split(SPACE);
                 int score = Integer.parseInt(valTokens[2]);
                 String stuInfo = valTokens[0]+SPACE+valTokens[1];
                 if(score == min){
@@ -157,8 +157,8 @@ public class ScoreAnalysis {
                 }
             }
             context.write(new Text("max:"), new IntWritable(max));
-            for (Text val : values){
-                String[] valTokens = val.toString().split(SPACE);
+            for (String val : cache){
+                String[] valTokens = val.split(SPACE);
                 int score = Integer.parseInt(valTokens[2]);
                 String stuInfo = valTokens[0]+SPACE+valTokens[1];
                 if(score == max){
@@ -191,6 +191,9 @@ public class ScoreAnalysis {
     }
 
     public static void main(String[] args) throws Exception {
+        // 将用户设置成hdfs上面可以用的user，避免权限问题
+        System.setProperty("HADOOP_USER_NAME","ldl");
+
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
